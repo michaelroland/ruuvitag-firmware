@@ -6,6 +6,7 @@
 #define PWM0_ENABLED    1
 #define APP_PWM_ENABLED 1
 #define PPI_ENABLED     1
+#define RTC_ENABLED     0
 #define TIMER_ENABLED   1
 #define TIMER0_ENABLED  1
 #define TIMER1_ENABLED  1
@@ -16,7 +17,9 @@
 #define CRC16_ENABLED   1
 #define CRC32_ENABLED   1
 #define NRF_LOG_ENABLED 0
-#define BLE_DIS_ENABLED 1
+#define PEER_MANAGER_ENABLED 0
+#define BLE_DIS_ENABLED 0
+#define BLE_NUS_ENABLED 0
 
 // WDT_CONFIG_RELOAD_VALUE - Reload value  <15-4294967295> (ms)
 // Watchdog cannot be stopped even when entering bootloader, 

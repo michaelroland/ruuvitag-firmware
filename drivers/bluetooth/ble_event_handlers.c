@@ -323,12 +323,16 @@ void pm_evt_handler(pm_evt_t const * p_evt)
 void ble_evt_dispatch(ble_evt_t * p_ble_evt)
 {
     NRF_LOG_DEBUG("Dispatching BLE Event to modules\r\n");
+    #if PEER_MANAGER_ENABLED > 0
     ble_conn_state_on_ble_evt(p_ble_evt);
     pm_on_ble_evt(p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
     bsp_btn_ble_on_ble_evt(p_ble_evt);
+    #endif
     ble_advertising_on_ble_evt(p_ble_evt);
+    #if PEER_MANAGER_ENABLED > 0
     on_ble_evt(p_ble_evt);
     application_on_ble_evt(p_ble_evt);
+    #endif
     nrf_ble_qwr_on_ble_evt(&m_qwr, p_ble_evt);
 }

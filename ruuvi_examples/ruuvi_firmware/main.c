@@ -60,7 +60,11 @@
 
 // Constants
 #define DEAD_BEEF               0xDEADBEEF    //!< Value used as error code on stack dump, can be used to identify stack location on stack unwind.
+#ifdef RTC_ENABLED
+#define USE_RTC RTC_ENABLED
+#else
 #define USE_RTC 0
+#endif
 
 // ID for main loop timer.
 APP_TIMER_DEF(main_timer_id);                 // Creates timer id for our program.
@@ -306,6 +310,7 @@ int main(void)
   // Initialize the application timer module.
   err_code |= init_timer(main_timer_id, MAIN_LOOP_INTERVAL_RAW_ACC, main_timer_handler);
   bluetooth_configure_advertising_interval(MAIN_LOOP_INTERVAL_RAW_ACC); // Broadcast only updated data, assuming there is an active receiver nearby.
+  bluetooth_configure_advertisement_type(BLE_GAP_ADV_TYPE_ADV_SCAN_IND);
   
   // Initialize RTC.
   #if USE_RTC > 0

@@ -238,6 +238,7 @@ static void gap_params_init(void)
     APP_ERROR_CHECK(err_code);
 }
 
+#if PEER_MANAGER_ENABLED > 0
 
 /**@brief Function for initializing the Connection Parameters module.
  */
@@ -263,6 +264,9 @@ static void conn_params_init(void)
     //nrf_delay_ms(10);
     APP_ERROR_CHECK(err_code);
 }
+
+#endif
+
 //TODO: Enable & differentiate slow / fast advertising
 static void advertising_init(void)
 {
@@ -338,6 +342,7 @@ uint32_t bluetooth_stack_init(void)
     NRF_LOG_INFO("Softdevice enabled, status: %s\r\n", (uint32_t)ERR_TO_STR(err_code));
     nrf_delay_ms(10);
 
+#if PEER_MANAGER_ENABLED > 0
     //Enable peer manager, erase bonds
     peer_manager_init(true);
     NRF_LOG_INFO("Peer manager init \r\n");
@@ -346,14 +351,17 @@ uint32_t bluetooth_stack_init(void)
     err_code |= application_services_init();
     NRF_LOG_INFO("Services init status %d\r\n", err_code);
     nrf_delay_ms(10);
+#endif
     
     gap_params_init();
     NRF_LOG_INFO("GAP params init\r\n");
     //nrf_delay_ms(10);
 
+#if PEER_MANAGER_ENABLED > 0
     conn_params_init();
     NRF_LOG_INFO("Conn params init, status\r\n");
     //nrf_delay_ms(10);
+#endif
 
     advertising_init();    
     NRF_LOG_INFO("Advertising init, status\r\n");
@@ -369,6 +377,7 @@ uint32_t bluetooth_stack_init(void)
  */
 void peer_manager_init(bool erase_bonds)
 {
+#if PEER_MANAGER_ENABLED > 0
     ble_gap_sec_params_t sec_param;
     ret_code_t           err_code;
 
@@ -402,6 +411,7 @@ void peer_manager_init(bool erase_bonds)
 
     err_code = pm_register(pm_evt_handler);
     APP_ERROR_CHECK(err_code);
+#endif
 }
 
 /**

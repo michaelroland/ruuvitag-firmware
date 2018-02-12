@@ -89,6 +89,27 @@ void bluetooth_configure_advertising_interval(uint16_t interval);
  */
 uint32_t set_advertising_interval(uint16_t interval);
 
+ /**
+ * @brief Function for configuring advertisement type
+ * @details https://infocenter.nordicsemi.com/index.jsp?topic=%2Fcom.nordic.infocenter.s132.api.v3.0.0%2Fgroup___b_l_e___g_a_p___a_d_v___t_y_p_e_s.html
+ * @param type Advertisement type, 0 ... 3
+ */
+void bluetooth_configure_advertisement_type(uint8_t type);
+ 
+/**
+ * @brief Function for configuring advertisement filter policy
+ * @details  https://infocenter.nordicsemi.com/index.jsp?topic=%2Fcom.nordic.infocenter.s132.api.v3.0.0%2Fstructble__gap__adv__params__t.html
+ * @param fp Advertisement filter policy, 0 ... 3
+ */
+void bluetooth_configure_advertisement_filter(uint8_t fp);
+ 
+/**
+ * @brief Function for configuring advertisement timeout
+ * @details  https://infocenter.nordicsemi.com/index.jsp?topic=%2Fcom.nordic.infocenter.s132.api.v3.0.0%2Fstructble__gap__adv__params__t.html
+ * @param fp Advertisement timout in seconds, 0x0001 ... 0x3FFF, 0 to disable
+ */
+void bluetooth_configure_advertisement_timeout(uint16_t timeout);
+
 /**
  * Set Eddystone URL advertisement package in advdata.
  * 
