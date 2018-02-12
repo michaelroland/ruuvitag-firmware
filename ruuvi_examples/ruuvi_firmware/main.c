@@ -72,13 +72,12 @@ APP_TIMER_DEF(main_timer_id);                 // Creates timer id for our progra
 #define BATTERY_INTERVAL_RAW_ACC_MASK 0x07F
 #define DEBOUNCE_THRESHOLD 250u
 
-#ifdef NRF_LOG_ENABLED
 static uint8_t data_buffer[24] = { 0 };
 static bool model_plus = false;     // Flag for sensors available
 static bool highres = false;        // Flag for used mode
 static uint64_t debounce = false;   // Flag for avoiding double presses
 static uint32_t acceleration_events = 0;
-#endif
+
 static void main_timer_handler(void * p_context);
 
 
