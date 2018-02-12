@@ -9,6 +9,8 @@
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
 
+#if RTC_ENABLED > 0
+
 #ifndef APP_RTC_INSTANCE
 #define APP_RTC_INSTANCE 2
 #endif
@@ -58,3 +60,6 @@ uint32_t millis(void)
   ms/=32768;
   return (uint32_t)ms;
 }
+
+#endif
+
