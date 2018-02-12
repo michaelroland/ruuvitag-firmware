@@ -169,6 +169,7 @@ void main_timer_handler(void * p_context)
     // If we have all the sensors.
     if (model_plus) {
         // Get environmental data.
+        bme280_read_measurements();
         environmental.temperature = bme280_get_temperature();
         environmental.pressure = bme280_get_pressure();
         environmental.humidity = bme280_get_humidity();
@@ -318,7 +319,7 @@ int main(void)
     bme280_set_oversampling_temp(BME280_OVERSAMPLING_1);
     bme280_set_oversampling_press(BME280_OVERSAMPLING_1);
     bme280_set_iir(BME280_IIR_16);
-    bme280_set_interval(BME280_STANDBY_1000_MS);  // WARNING: timer interval hardcoded to 1000 ms
+    bme280_set_interval(BME280_STANDBY_1000_MS);
     bme280_set_mode(BME280_MODE_NORMAL);
     NRF_LOG_DEBUG("BME280 configuration done\r\n");
     highres = true;
