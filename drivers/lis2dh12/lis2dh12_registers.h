@@ -168,10 +168,10 @@
 #define LIS2DH12_XL_MASK           0x01
 
 // INT1/2_THS masks
-#define LIS2DH12_THS_MASK          0x4F
+#define LIS2DH12_THS_MASK          0x7F
 
 // INT1/2_DURATION masks
-#define LIS2DH12_D_MASK            0x4F
+#define LIS2DH12_D_MASK            0x7F
 
 // CLICK_CFG masks
 #define LIS2DH12_ZD_MASK           0x20
