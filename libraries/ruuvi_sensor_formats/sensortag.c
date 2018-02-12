@@ -106,6 +106,63 @@ void encodeToRawFormat5(uint8_t* data_buffer, bme280_data_t* environmental, acce
 
 }
 
+void encodeToRawFormatF1(uint8_t* data_buffer, bme280_data_t* environmental, acceleration_t* acceleration, uint32_t acceleration_events, uint16_t vbatt, uint32_t measurement_number, uint16_t measurement_interval)
+{
+    data_buffer[0] = RAW_FORMAT_F1;
+    // Byte 1..2: temperature (precision 0.005 degC)
+    int32_t temperature = environmental->temperature;
+    temperature <<= 1;
+    data_buffer[1] = temperature >> 8;
+    data_buffer[2] = temperature & 0xFF;
+    // Byte 3..4: humidity (precision 0.0025 %RH)
+    uint32_t humidity = environmental->humidity;
+    humidity *= 400;
+    humidity /= 1024;
+    data_buffer[3] = humidity >> 8;
+    data_buffer[4] = humidity & 0xFF;
+    // Byte 5..6: pressure (in Pa biased by -50000 Pa)
+    uint32_t pressure = environmental->pressure;
+    pressure >>= 8;
+    if (pressure > 50000) {
+        pressure -= 50000;
+    } else {
+        pressure = 0;
+    }
+    data_buffer[5] = pressure >> 8;
+    data_buffer[6] = pressure & 0xFF;
+    // Byte 7..8: acceleration in X direction (in mg, signed)
+    int16_t acc_x = acceleration->x;
+    data_buffer[7] = acc_x >> 8;
+    data_buffer[8] = acc_x & 0xFF;
+    // Byte 9..10: acceleration in Y direction (in mg, signed)
+    int16_t acc_y = acceleration->y;
+    data_buffer[9] = acc_y >> 8;
+    data_buffer[10] = acc_y & 0xFF;
+    // Byte 11..12: acceleration in Z direction (in mg, signed)
+    int16_t acc_z = acceleration->z;
+    data_buffer[11] = acc_z >> 8;
+    data_buffer[12] = acc_z & 0xFF;
+    // Byte 13..14(Bits 7..5): battery voltage (in mV biased by -1600 mV)
+    // Byte 14(Bits 4..0)..16: number of acceleration events
+    if (vbatt > 1600) {
+        vbatt -= 1600;
+    } else {
+        vbatt = 0;
+    }
+    vbatt <<= 5;
+    data_buffer[13] = vbatt >> 8;
+    data_buffer[14] = vbatt & 0xE0;
+    data_buffer[14] |= (acceleration_events >> 16) & 0x1F;
+    data_buffer[15] = (acceleration_events >> 8) & 0xFF;
+    data_buffer[16] = acceleration_events & 0xFF;
+    // Byte 17..19: RFU
+    data_buffer[20] = (measurement_interval / 100) & 0xFF;
+    // Byte 21..23: measurement#
+    data_buffer[21] = (measurement_number >> 16) & 0xFF;
+    data_buffer[22] = (measurement_number >> 8) & 0xFF;
+    data_buffer[23] = measurement_number & 0xFF;
+}
+
 /**
  *  Encodes sensor data into given char* url. The base url must have the base of url written by caller.
  *  For example, url = { 0x03, 'r' 'u' 'u' '.' 'v' 'i' '/' '#' '0' '0' '0' '0' '0' '0' '0' '0'}

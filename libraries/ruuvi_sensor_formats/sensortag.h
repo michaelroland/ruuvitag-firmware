@@ -23,6 +23,9 @@
 #define RAW_FORMAT_2                    0x05          /**< Proposal, please see https://f.ruuvi.com/t/proposed-next-high-precision-data-format/692 */
 #define RAW_2_ENCODED_DATA_LENGTH       24
 
+#define RAW_FORMAT_F1                   0xF1
+#define RAW_F1_ENCODED_DATA_LENGTH      24
+
 #define WEATHER_STATION_URL_FORMAT      0x02				  /**< Base64 */
 #define WEATHER_STATION_URL_ID_FORMAT   0x04				  /**< Base64, with ID byte */
 
@@ -69,6 +72,7 @@ void encodeToSensorDataFormat(uint8_t* data_buffer, ruuvi_sensor_t* data);
  */
 void encodeToRawFormat5(uint8_t* data_buffer, bme280_data_t* environmental, acceleration_t* acceleration, uint16_t acceleration_events, uint16_t vbatt, int8_t tx_pwr);
 
+void encodeToRawFormatF1(uint8_t* data_buffer, bme280_data_t* environmental, acceleration_t* acceleration, uint32_t acceleration_events, uint16_t vbatt, uint32_t measurement_number, uint16_t measurement_interval);
 
 /**
  *  Encodes sensor data into given char* url. The base url must have the base of url written by caller.
