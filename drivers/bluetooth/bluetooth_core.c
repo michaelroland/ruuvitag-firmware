@@ -150,12 +150,12 @@ uint32_t bluetooth_set_name(const char* name_base, size_t name_length)
   // space + 4 hex chars
   char name[20] = { 0 };
   memcpy(name, name_base, name_length);
-  sprintf(name + name_length, " %x", mac0>>16);
+  sprintf(name + name_length, "%04X", mac0>>16);
   NRF_LOG_DEBUG("%s\r\n", (uint32_t)name);
-  NRF_LOG_HEXDUMP_DEBUG((uint8_t*)name, name_length+ 5);
+  NRF_LOG_HEXDUMP_DEBUG((uint8_t*)name, name_length + 4);
   err_code |= sd_ble_gap_device_name_set(&sec_mode,
                                         (const uint8_t *) name,
-                                        name_length + 5);
+                                        name_length + 4);
   if(was_advertising) { bluetooth_advertising_start(); }
   return err_code;
 }
