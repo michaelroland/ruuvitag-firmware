@@ -60,6 +60,7 @@
 
 // Constants
 #define DEAD_BEEF               0xDEADBEEF    //!< Value used as error code on stack dump, can be used to identify stack location on stack unwind.
+#define USE_RTC 0
 
 // ID for main loop timer.
 APP_TIMER_DEF(main_timer_id);                 // Creates timer id for our program.
@@ -70,15 +71,52 @@ APP_TIMER_DEF(main_timer_id);                 // Creates timer id for our progra
 #define BATTERY_INTERVAL_RAW_LOW_MASK 0x03F
 #define MAIN_LOOP_INTERVAL_RAW_ACC 2500u
 #define BATTERY_INTERVAL_RAW_ACC_MASK 0x07F
-#define DEBOUNCE_THRESHOLD 250u
+#define DEBOUNCE_TRESHOLD 250u
 
 static uint8_t data_buffer[24] = { 0 };
 static bool model_plus = false;     // Flag for sensors available
 static bool highres = false;        // Flag for used mode
-static uint64_t debounce = false;   // Flag for avoiding double presses
 static uint32_t acceleration_events = 0;
 
+#if USE_RTC > 0
+static uint64_t debounce = 0;       // Time for avoiding double presses
+#else
+static bool debounce = false;       // Flag for avoiding double presses
+#endif
+
 static void main_timer_handler(void * p_context);
+
+
+#if USE_RTC > 0
+static inline bool debounce_ignore(void)
+{
+    uint64_t now = millis();
+    if ((now - debounce) < DEBOUNCE_THRESHOLD) {
+        return true;
+    }
+    debounce = now;
+    return false;
+}
+
+static inline void debounce_clear(void)
+{
+    // no need to clear since debounce uses RTC
+}
+#else
+static inline bool debounce_ignore(void)
+{
+    if (debounce) {
+        return true;
+    }
+    debounce = true;
+    return false;
+}
+
+static inline void debounce_clear(void)
+{
+    debounce = false;
+}
+#endif
 
 
 /**@brief Handler for button press.
@@ -87,8 +125,7 @@ static void main_timer_handler(void * p_context);
 void change_mode(void* data, uint16_t length)
 {
   // Avoid double presses
-  if ((millis() - debounce) < DEBOUNCE_THRESHOLD) { return; }
-  debounce = millis();
+  if (debounce_ignore()) { return; }
   highres = !highres;
   if (model_plus)
   {
@@ -165,6 +202,8 @@ void main_timer_handler(void * p_context)
     bme280_data_t environmental;
     lis2dh12_sensor_buffer_t buffer;
     
+    debounce_clear();
+
     // If we have all the sensors.
     if (model_plus) {
         // Get environmental data.
@@ -269,8 +308,10 @@ int main(void)
   bluetooth_configure_advertising_interval(MAIN_LOOP_INTERVAL_RAW_ACC); // Broadcast only updated data, assuming there is an active receiver nearby.
   
   // Initialize RTC.
-  //err_code |= init_rtc();
-
+  #if USE_RTC > 0
+  err_code |= init_rtc();
+  #endif
+  
   // Start interrupts.
   err_code |= pin_interrupt_init();
   // Initialize button.
