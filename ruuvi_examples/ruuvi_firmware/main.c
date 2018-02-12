@@ -148,7 +148,7 @@ void change_mode(void* data, uint16_t length)
     }
   }
   NRF_LOG_INFO("Updating in %d mode\r\n", (uint32_t) highres);
-  main_timer_handler(NULL);
+  bluetooth_apply_configuration();
 }
 
 
