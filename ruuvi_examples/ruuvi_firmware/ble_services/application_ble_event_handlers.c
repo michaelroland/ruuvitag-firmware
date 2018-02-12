@@ -7,6 +7,8 @@
 #include "nrf_log_ctrl.h"
 
 
+#if NRF_MODULE_ENABLED(PEER_MANAGER)
+
 /**@brief Function for handling the Application's BLE Stack events.
  *
  * @details Handles all events from the BLE stack of interest
@@ -24,3 +26,6 @@ void application_on_ble_evt(ble_evt_t * p_ble_evt)
   ble_nus_t* p_nus = get_nus();
   ble_nus_on_ble_evt(p_nus, p_ble_evt);
 }
+
+#endif
+

@@ -16,7 +16,7 @@
 #include "sdk_config.h"
 
 //Do not compile RAM-consuming buffers if they're not used
-#if NFC_HAL_ENABLED
+#if NRF_MODULE_ENABLED(NFC_HAL)
 
 
 uint8_t m_ndef_msg_buf[256];

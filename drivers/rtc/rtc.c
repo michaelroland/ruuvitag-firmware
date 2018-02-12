@@ -5,11 +5,11 @@
 #include "nrf_drv_rtc.h"
 #include "nrf_drv_clock.h"
 
+#if NRF_MODULE_ENABLED(RTC)
+
 #define NRF_LOG_MODULE_NAME "RTC"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
-
-#if RTC_ENABLED > 0
 
 #ifndef APP_RTC_INSTANCE
 #define APP_RTC_INSTANCE 2

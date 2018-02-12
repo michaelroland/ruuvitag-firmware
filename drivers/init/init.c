@@ -80,9 +80,11 @@ init_err_code_t init_ble(void)
     //Enable BLE STACK
     err_code =  bluetooth_stack_init();
     
+    #if NRF_MODULE_ENABLED(PEER_MANAGER)
     // Application Replies are sent by BLE GATT
     set_ble_gatt_handler(ble_std_transfer_asynchronous);
     set_reply_handler(ble_std_transfer_asynchronous);
+    #endif
     
     NRF_LOG_DEBUG("BLE Stack init done\r\n");
     return (NRF_SUCCESS == err_code) ? INIT_SUCCESS : INIT_ERR_UNKNOWN;

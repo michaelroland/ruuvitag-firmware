@@ -60,7 +60,7 @@
 
 // Constants
 #define DEAD_BEEF               0xDEADBEEF    //!< Value used as error code on stack dump, can be used to identify stack location on stack unwind.
-#ifdef RTC_ENABLED
+#if NRF_MODULE_ENABLED(RTC)
 #define USE_RTC RTC_ENABLED
 #else
 #define USE_RTC 0
@@ -183,9 +183,8 @@ static void power_manage(void)
   uint32_t err_code = sd_app_evt_wait();
   APP_ERROR_CHECK(err_code);
 
-  // Signal mode by led color.
-  if (highres) { nrf_gpio_pin_clear(LED_RED); }
-  else { nrf_gpio_pin_clear(LED_GREEN); }
+  // Signal activity by green led.
+  nrf_gpio_pin_clear(LED_GREEN);
 }
 
 
@@ -301,8 +300,10 @@ int main(void)
   err_code |= init_leds();      // INIT leds first and turn RED on.
   nrf_gpio_pin_clear(LED_RED);  // If INIT fails at later stage, RED will stay lit.
 
-  //err_code |= init_nfc();
-
+  #if NRF_MODULE_ENABLED(NFC_HAL)
+  err_code |= init_nfc();
+  #endif
+  
   // Initialize BLE Stack. Required in all applications for timer operation.
   err_code |= init_ble();
   bluetooth_tx_power_set(BLE_TX_POWER);

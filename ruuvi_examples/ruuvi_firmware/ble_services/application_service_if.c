@@ -14,6 +14,8 @@
 #include "ble_bulk_transfer.h"
 #include "ruuvi_endpoints.h"
 
+#if NRF_MODULE_ENABLED(PEER_MANAGER)
+
 #define NRF_LOG_MODULE_NAME "SERVICE"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
@@ -168,3 +170,6 @@ ble_dfu_t* get_dfu(void)
 {
   return &m_dfus;
 }
+
+#endif
+

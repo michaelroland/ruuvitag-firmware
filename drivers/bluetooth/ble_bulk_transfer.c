@@ -6,6 +6,8 @@
 
 #include "ruuvi_endpoints.h"
 
+#if NRF_MODULE_ENABLED(PEER_MANAGER)
+
 #define NRF_LOG_MODULE_NAME "BLE_BULK_TX"
 #include "nrf_log.h"
 #include "nrf_log_ctrl.h"
@@ -205,4 +207,6 @@ ret_code_t ble_bulk_message_clean(ble_bulk_tx_t* element)
   free(element->chunk_index);
   return NRF_SUCCESS;
 }
+
+#endif
 

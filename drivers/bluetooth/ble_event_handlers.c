@@ -15,7 +15,6 @@
 
 #include "application_ble_event_handlers.h"
 
-
 static uint16_t                          m_conn_handle = BLE_CONN_HANDLE_INVALID;   /**< Handle of the current connection. */
 nrf_ble_qwr_t                            m_qwr;                                     /**< Queued Writes structure.*/
 
@@ -57,6 +56,8 @@ void fds_evt_handler(fds_evt_t const * const p_evt)
     }
 }
 
+#if NRF_MODULE_ENABLED(PEER_MANAGER)
+
 /**@brief Function for handling a Connection Parameters error.
  *
  * @param[in] nrf_error  Error code containing information about what went wrong.
@@ -66,6 +67,8 @@ void conn_params_error_handler(uint32_t nrf_error)
     NRF_LOG_ERROR("Connection parameter error\r\n");
     APP_ERROR_HANDLER(nrf_error);
 }
+
+#endif
 
 /**@brief Function for handling advertising events.
  *
@@ -91,6 +94,8 @@ void on_adv_evt(ble_adv_evt_t ble_adv_evt)
             break;
     }
 }
+
+#if NRF_MODULE_ENABLED(PEER_MANAGER)
 
 /**@brief Function for handling the Application's BLE Stack events.
  *
@@ -312,6 +317,8 @@ void pm_evt_handler(pm_evt_t const * p_evt)
     }
 }
 
+#endif
+
 
 /**@brief Function for dispatching a BLE stack event to all modules with a BLE stack event handler.
  *
@@ -323,14 +330,14 @@ void pm_evt_handler(pm_evt_t const * p_evt)
 void ble_evt_dispatch(ble_evt_t * p_ble_evt)
 {
     NRF_LOG_DEBUG("Dispatching BLE Event to modules\r\n");
-    #if PEER_MANAGER_ENABLED > 0
+    #if NRF_MODULE_ENABLED(PEER_MANAGER)
     ble_conn_state_on_ble_evt(p_ble_evt);
     pm_on_ble_evt(p_ble_evt);
     ble_conn_params_on_ble_evt(p_ble_evt);
     bsp_btn_ble_on_ble_evt(p_ble_evt);
     #endif
     ble_advertising_on_ble_evt(p_ble_evt);
-    #if PEER_MANAGER_ENABLED > 0
+    #if NRF_MODULE_ENABLED(PEER_MANAGER)
     on_ble_evt(p_ble_evt);
     application_on_ble_evt(p_ble_evt);
     #endif
