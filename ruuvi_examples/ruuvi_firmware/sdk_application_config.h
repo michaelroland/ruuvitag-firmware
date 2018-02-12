@@ -12,10 +12,10 @@
 #define TIMER2_ENABLED  1
 #define TIMER3_ENABLED  1
 #define TIMER4_ENABLED  0  //Required by NFC
-#define NFC_HAL_ENABLED 1
+#define NFC_HAL_ENABLED 0
 #define CRC16_ENABLED   1
 #define CRC32_ENABLED   1
-#define NRF_LOG_ENABLED 1
+#define NRF_LOG_ENABLED 0
 #define BLE_DIS_ENABLED 1
 
 // WDT_CONFIG_RELOAD_VALUE - Reload value  <15-4294967295> (ms)
