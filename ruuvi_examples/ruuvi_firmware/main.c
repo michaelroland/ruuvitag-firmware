@@ -150,10 +150,9 @@ static void power_manage(void)
 
 static void updateAdvertisement(void)
 {
-  ret_code_t err_code = NRF_SUCCESS;
-  err_code |= bluetooth_set_manufacturer_data(data_buffer, sizeof(data_buffer));
+  ret_code_t err_code;
+  err_code = bluetooth_set_manufacturer_data(data_buffer, sizeof(data_buffer));
   NRF_LOG_DEBUG("Applying configuration, data status %d\r\n", err_code);
-  err_code |= bluetooth_apply_configuration();
 }
 
 
@@ -268,7 +267,7 @@ int main(void)
   // Initialize the application timer module.
   err_code |= init_timer(main_timer_id, MAIN_LOOP_INTERVAL_RAW_ACC, main_timer_handler);
   bluetooth_configure_advertising_interval(MAIN_LOOP_INTERVAL_RAW_ACC); // Broadcast only updated data, assuming there is an active receiver nearby.
-
+  
   // Initialize RTC.
   //err_code |= init_rtc();
 
@@ -339,6 +338,9 @@ int main(void)
   // Init ok, start watchdog with default wdt event handler (reset).
   init_watchdog(NULL);
 
+  // apply BT configuration
+  bluetooth_apply_configuration();
+  
   // Enter main loop.
   for (;;)
   {
